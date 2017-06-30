@@ -1,0 +1,75 @@
+<h3><%= link_to "Search Users",   search_path %></h3>
+
+<h1> List of all other people at Brisk-le </h1>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Username</th>
+		<th>Email</th>
+	</tr>
+	<% @user_details = User.all %>
+	<% @user_details.each do |data| %>
+	<% if data.username != @user.username %>	
+		<tr>
+			<td><%= data.name %></td>
+			<td><%= data.username %></td>
+			<td><%= data.email %></td>
+		</tr>
+		
+		<% @fri = Friend.new(f1_username: @user.username, f2_username: data.username, 	
+														status: 0)   
+														%>
+		    <% if @fri.save %>
+		    <%	   %>
+		    <% else %>
+		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
+		    <%  	render 'new'	%>
+		    <% end %>
+		
+		<% @friI = Friend.new(f1_username: data.username, f2_username: @user.username, 	
+														status: 0)   
+														%>
+		    <% if @friI.save %>
+		    <%	   %>
+		    <% else %>
+		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
+		    <%  	render 'new'	%>
+		    <% end %>
+		
+
+	<% end %>
+	<% end %>
+</table>
+
+<!-- 
+<%= @user.name %>, <%= @user.email %>, <%= @user.username %> 
+-->
+
+<h3> Connect with the people </h3>
+
+<table>
+	<tr>
+		<th>Username 1</th>
+		<th>Username 2</th>
+		<th> Status </th>
+	</tr>
+	<% @fri = Friend.where(:f1_username => @user.username) %>
+	<% @fri.each do |data| %>
+		<tr>
+			<td><%= data.f1_username %></td>
+			<td><%= data.f2_username %></td>
+			<% if data.status == 0 %>
+				<td> <%= link_to "Add friend", add_friend_path(:id => data.id) %> </td>
+			<% elsif data.status == 1 %>
+				<td> Friend Request Sent </td>
+			<% elsif data.status == 2 %>
+				<td> <%= link_to "Confirm friend",   confirm_path %> </td>
+			<% else %>
+				<td> Friends </td>
+			<% end %>
+		</tr>
+		
+	<% end %>
+</table>
+
+

@@ -1,0 +1,14 @@
+
+<h1>Users</h1>
+<%= link_to 'New User', signup_path %>
+
+<div class="users-search">
+	<input type="text" id="users-search-txt" autofocus>
+	<div id="users-search-results"> </div>
+</div>
+
+
+<%= content_for :script do %>
+new app.User;
+<% end %>
+
