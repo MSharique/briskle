@@ -15,35 +15,52 @@
 			<td><%= data.username %></td>
 			<td><%= data.email %></td>
 		</tr>
-		
-		<% @fri = Friend.new(f1_username: @user.username, f2_username: data.username, 	
-														status: 0)   
-														%>
-		    <% if @fri.save %>
-		    <%	   %>
-		    <% else %>
-		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
-		    <%  	render 'new'	%>
-		    <% end %>
-		
-		<% @friI = Friend.new(f1_username: data.username, f2_username: @user.username, 	
-														status: 0)   
-														%>
-		    <% if @friI.save %>
-		    <%	   %>
-		    <% else %>
-		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
-		    <%  	render 'new'	%>
-		    <% end %>
-		
-
-	<% end %>
+		<% end %>
 	<% end %>
 </table>
 
 <!-- 
 <%= @user.name %>, <%= @user.email %>, <%= @user.username %> 
 -->
+
+	<% usernames = Array.new %>
+	<% @fri = Friend.where(f1_username: @user.username)   %>
+	<% @fri.each do |friend| %>
+	<% usernames.insert(-1, friend.f2_username) %>
+	<% end %>
+	
+
+<% @user_details = User.all %>
+<% @user_details.each do |data| %>
+<% if data.username != @user.username %>	
+	<% if usernames.include?(data.username) %>
+	<% %>
+	<% else %>
+	<% friI = Friend.new(f1_username: @user.username, f2_username: data.username, 	
+														status: 0)  %>
+		    <% if friI.save %>
+		    <% %>  
+		    <% else %>
+		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
+		    <%  	render 'new'	%>
+		    <% end %>
+	<% friI = Friend.new(f1_username: data.username, f2_username: @user.username, 	
+														status: 0)   
+														%>
+		    <% if friI.save %>
+		   	<% %>  
+		    <% else %>
+		    <%	flash[:danger] = "Some error occurs while updating Friend" %>
+		    <%  	render 'new'	%>
+		    <% end %>
+			    
+	<% end %>	  	  
+<% end %>
+<% end %>	
+
+
+		
+
 
 <h3> Connect with the people </h3>
 
@@ -63,7 +80,7 @@
 			<% elsif data.status == 1 %>
 				<td> Friend Request Sent </td>
 			<% elsif data.status == 2 %>
-				<td> <%= link_to "Confirm friend",   confirm_path %> </td>
+				<td> <%= link_to "Confirm friend",   confirm_path(:f1 => data.f1_username, :f2 => data.f2_username) %> </td>
 			<% else %>
 				<td> Friends </td>
 			<% end %>
@@ -72,4 +89,24 @@
 	<% end %>
 </table>
 
+
+<!-- <h3> See the friends status </h3>
+
+<table>
+	<tr>
+		<th>Username 1</th>
+		<th>Username 2</th>
+		<th> Status </th>
+	</tr>
+	<% @fri = Friend.where(:f1_username => @user.username) %>
+	<% @fri.each do |data| %>
+		<tr>
+			<td><%= data.f1_username %></td>
+			<td><%= data.f2_username %></td>
+			<td><%= data.status  %></td>
+	<% end %>
+		</tr>
+		
+</table>
+ -->
 

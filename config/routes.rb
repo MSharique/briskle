@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   delete '/logout',  to: 'sessions#destroy'
   get   '/search',  to:   'users#search'
   get '/add_friend', to: 'friend#add_friend'
+  get '/confirm',  to:  'friend#confirm'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 root 'static_pages#home'
 resources :users
